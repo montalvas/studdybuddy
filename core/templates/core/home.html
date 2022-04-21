@@ -9,8 +9,11 @@
 <div>
     {% for room in rooms %}
     <div>
+        <span>@{{ room.host.username }}</span>
         <h3>{{ room.id }} - <a href="{% url 'core:room' room.id %}">{{ room.name }}</a></h3>
+        <small>{{ room.topic }}</small>
     </div>
+    <br>
     {% endfor %}
 </div>
 {% endblock content %}
