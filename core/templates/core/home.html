@@ -6,12 +6,19 @@
 
 <h1>Home Page</h1>
 
+<p><a href="{% url 'core:create-room' %}">Create Room</a></p>
+
 <div>
     {% for room in rooms %}
     <div>
         <span>@{{ room.host.username }}</span>
         <h3>{{ room.id }} - <a href="{% url 'core:room' room.id %}">{{ room.name }}</a></h3>
-        <small>{{ room.topic }}</small>
+        <p>{{ room.topic }}</p>
+        <p>
+            <a href="{% url 'core:update-room' room.id %}">Edit</a> - 
+            <a href="{% url 'core:delete-room' room.id %}">Delete</a>
+        </p>
+        <hr>
     </div>
     <br>
     {% endfor %}
