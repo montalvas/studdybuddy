@@ -3,6 +3,7 @@
 {% block title %}Login{% endblock title %}
 
 {% block content %}
+
 {% if page == 'login' %}
 <div>
     <form action="" method="post">
@@ -25,10 +26,11 @@
 </div>
 
 {% else %}
+
 <div>
     <form action="" method="post">
         {% csrf_token %}
-        
+        {{ form.as_p }}
 
         <input type="submit" value="Register">
     </form>
@@ -37,4 +39,5 @@
     <a href="{% url 'core:login' %}">Login</a>
 </div>
 {% endif %}
+
 {% endblock content %}

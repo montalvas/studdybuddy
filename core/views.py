@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -55,9 +56,22 @@ def logout_page(request):
     return redirect('core:home')
 
 def register_page(request):
+    form = UserCreationForm()
     
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            user.save()
+            login(request, user)
+            return redirect('core:home')
+        
+        else:
+            messages.error('An error had occured during registration.')
     
-    return render(request, 'core/login_register.html')
+    return render(request, 'core/login_register.html', {'form': form})
 
 # Rooms
 
