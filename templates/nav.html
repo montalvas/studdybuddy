@@ -10,7 +10,7 @@
 
     {% if request.user.is_authenticated %}
         <div>
-            <p>Wellcome {{ request.user }}</p>
+            <p>Hey, {{ request.user }}</p>
             <p><a href="{% url 'core:logout' %}">Logout</a></p>
         </div>
         
