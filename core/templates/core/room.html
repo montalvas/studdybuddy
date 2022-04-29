@@ -28,7 +28,7 @@
             <div>
                 <small>@{{ message.user }} {{ message.created|timesince }} ago</small>
                 <p>{{ message.body }}</p>
-                {% if request.user.is_authenticated %}
+                {% if request.user == message.user %}
                 <p>
                     <a href="">Edit</a>
                     <a href="{% url 'core:delete-message' message.id %}">Delete</a>
