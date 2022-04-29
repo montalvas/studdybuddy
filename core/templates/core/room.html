@@ -4,30 +4,58 @@
 
 {% block content %}
 
-<h1>{{ room.name }}</h1>
+{% block style %}
+<style>
+    .room-container {
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+    }
+</style>
+{% endblock style %}
 
-<p>{{ room.description }}</p>
-
-<div class="comment-wrapper">
-    <h3>Conversation</h3>
-    <hr>
-
-    {% for message in room_messages %}
+<div class="room-container">
     <div>
-        <small>@{{ message.user }} {{ message.created|timesince }} ago</small>
-        <p>{{ message.body }}</p>
-        <hr>
+        <h1>{{ room.name }}</h1>
+        <small>@{{ room.host }}</small>
+        
+        <p>{{ room.description }}</p>
+        
+        <div class="comment-wrapper">
+            <h3>Conversation</h3>
+            <hr>
+        
+            {% for message in room_messages %}
+            <div>
+                <small>@{{ message.user }} {{ message.created|timesince }} ago</small>
+                <p>{{ message.body }}</p>
+                {% if request.user.is_authenticated %}
+                <p>
+                    <a href="">Edit</a>
+                    <a href="{% url 'core:delete-message' message.id %}">Delete</a>
+                </p>
+                {% endif %}
+                <hr>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% if request.user.is_authenticated %}
+        <div class="form-wrapper">
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="text" name="body" placeholder="Write you message here...">
+            </form>
+        </div>
+        {% endif %}
     </div>
-    {% endfor %}
-</div>
 
-{% if request.user.is_authenticated %}
-<div class="form-wrapper">
-    <form action="" method="post">
-        {% csrf_token %}
-        <input type="text" name="body" placeholder="Write you message here...">
-    </form>
-</div>
-{% endif %}
+    <div>
+        <h3>Participants</h3>
+        <hr>
+        {% for user in participants %}
+            <p>@{{ user.username }}</p>
+        {% endfor %}
+    </div>
+</div><!--room container-->
 
 {% endblock content %}

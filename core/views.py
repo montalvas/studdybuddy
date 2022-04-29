@@ -25,6 +25,8 @@ def home(request):
     
     return render(request, 'core/home.html', context)
 
+################### User ########################
+
 def login_page(request):
     if request.user.is_authenticated:
         return redirect('core:home')
@@ -73,11 +75,12 @@ def register_page(request):
     
     return render(request, 'core/login_register.html', {'form': form})
 
-# Rooms
+################### Rooms ########################
 
 def room(request, pk):
     room = Room.objects.get(id=pk)
     room_messages = room.message_set.all().order_by('-created')
+    participants = room.participants.all()
     
     if request.method == 'POST':
         message = Message.objects.create(
@@ -86,9 +89,13 @@ def room(request, pk):
             body = request.POST.get('body')
         )
         
+        room.participants.add(request.user)
+        
         return redirect('core:room', pk=room.id)
     
-    context = {'room': room, 'room_messages': room_messages}
+    context = {'room': room,
+               'room_messages': room_messages,
+               'participants': participants}
     
     return render(request, 'core/room.html', context)
 
@@ -141,4 +148,19 @@ def delete_room(request, pk):
         room.delete()
         return redirect('core:home')
     
-    return render(request, 'core/delete_room.html', {'obj': room})
+    return render(request, 'core/delete.html', {'obj': room})
+
+################### Message ########################
+
+@login_required(login_url='core:login')
+def delete_message(request, pk):
+    message = Message.objects.get(id=pk)
+    
+    if request.user != message.user:
+        return HttpResponse("You are not allowed here.")
+    
+    if request.method == 'POST':
+        message.delete()
+        return redirect('core:home')
+    
+    return render(request, 'core/delete.html', {'obj': message})
