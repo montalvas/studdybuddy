@@ -21,11 +21,31 @@ def home(request):
     )
     topics = Topic.objects.all()
     room_count = rooms.count()
-    context = {'rooms': rooms, 'topics': topics, 'room_count': room_count}
+    room_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
+    
+    context = {'rooms': rooms,
+               'topics': topics,
+               'room_count': room_count,
+               'room_messages': room_messages}
     
     return render(request, 'core/home.html', context)
 
 ################### User ########################
+
+def profile(request, pk):
+    user = User.objects.get(id=pk)
+    rooms = user.room_set.all()
+    topics = Topic.objects.all()
+    messages = user.message_set.all()
+    
+    context = {
+        'user': user,
+        'rooms': rooms,
+        'topics': topics,
+        'room_messages': messages
+    }
+    
+    return render(request, 'core/profile.html', context)
 
 def login_page(request):
     if request.user.is_authenticated:
@@ -109,10 +129,7 @@ def create_room(request):
             form.save()
             return redirect('core:home')
     
-    context = {
-        'form': form,
-        'title': 'Create Room'
-        }
+    context = {'form': form}
     
     return render(request, 'core/form_room.html', context)
 
@@ -130,10 +147,7 @@ def update_room(request, pk):
             form.save()
             return redirect('core:home')
     
-    context = {
-        'form': form,
-        'title': 'Update Room'
-        }
+    context = {'form': form,}
     
     return render(request, 'core/form_room.html', context)
 
