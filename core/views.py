@@ -1,13 +1,13 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
 from .models import Room, Topic, Message
-from .forms import RoomForm
+from .forms import RoomForm, UserCreationForm, UpdateUserForm
+from .my_func import check_email
 
 # Create your views here.
 
@@ -47,6 +47,19 @@ def profile(request, pk):
     
     return render(request, 'core/profile.html', context)
 
+@login_required(login_url='core:login')
+def update_profile(request):
+    user = request.user
+    form = UpdateUserForm(instance = user)
+    
+    if request.method == 'POST':  
+        form = UpdateUserForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('core:profile', pk=user.id)
+    
+    return render(request, 'core/update-user.html', {'form': form})
+
 def login_page(request):
     if request.user.is_authenticated:
         return redirect('core:home')
@@ -80,7 +93,7 @@ def logout_page(request):
 def register_page(request):
     form = UserCreationForm()
     
-    if request.method == 'POST':
+    if request.method == 'POST': 
         form = UserCreationForm(request.POST)
         
         if form.is_valid():
@@ -91,7 +104,7 @@ def register_page(request):
             return redirect('core:home')
         
         else:
-            messages.error('An error had occured during registration.')
+            messages.error(request, 'An error had occured during registration.')
     
     return render(request, 'core/login_register.html', {'form': form})
 
