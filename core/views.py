@@ -7,7 +7,6 @@ from django.contrib import messages
 from django.db.models import Q
 from .models import Room, Topic, Message
 from .forms import RoomForm, UserCreationForm, UpdateUserForm
-from .my_func import check_email
 
 # Create your views here.
 
@@ -207,7 +206,8 @@ def delete_message(request, pk):
         return HttpResponse("You are not allowed here.")
     
     if request.method == 'POST':
+        pk = message.room.id
         message.delete()
-        return redirect('core:home')
+        return redirect('core:room', pk=pk)
     
     return render(request, 'core/delete.html', {'obj': message})
