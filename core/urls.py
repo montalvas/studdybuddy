@@ -22,4 +22,8 @@ urlpatterns = [
     
     # MESSAGE
     path('delete-message/<int:pk>', views.delete_message, name='delete-message'),
+    
+    # MOBILE
+    path('topics/', views.topics, name='topics'),
+    path('activities/', views.activities, name='activities')
 ]
