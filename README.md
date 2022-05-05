@@ -1,4 +1,4 @@
 # studdybuddy
 A discord-like application with Python Django.
 
-* configurações iniciais, criação do app core
+<a href="https://montalvas-studdybud.herokuapp.com/">Heroku</a>
