@@ -5,8 +5,8 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     email = models.EmailField(max_length=200, unique=True, null=True)
-    bio = models.TextField(null=True)
-    avatar = models.ImageField(null=True, default='assets/avatar.svg', upload_to='upload/')
+    bio = models.TextField(null=True, blank=True)
+    avatar = models.ImageField(null=True, default='avatar.svg', upload_to='upload/')
 
 class Topic(models.Model):
     name = models.CharField(max_length=200)
