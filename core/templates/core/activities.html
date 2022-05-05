@@ -26,7 +26,7 @@
           <div class="activities__boxHeader roomListRoom__header">
             <a href="{% url 'core:profile' message.user.id %}" class="roomListRoom__author">
               <div class="avatar avatar--small">
-                <img src="{% static 'assets/avatar.svg' %}" />
+                <img src="{{ message.user.avatar.url }}" />
               </div>
               <p>
                 @{{ message.user }}

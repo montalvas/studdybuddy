@@ -421,11 +421,28 @@ a {
 }
 /*========== Layout Box ==========*/
 
-.layout__box {
+.layout__box__register {
   width: 90%;
   max-width: 48rem;
   min-height: 40rem;
-  
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -40%);
+  background-color: var(--color-dark);
+  border-radius: 1rem;
+  box-shadow: 1px 1px 6px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.layout__box__login {
+  width: 90%;
+  max-width: 48rem;
+  min-height: 40rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%);
   background-color: var(--color-dark);
   border-radius: 1rem;
   box-shadow: 1px 1px 6px 3px rgba(0, 0, 0, 0.1);
