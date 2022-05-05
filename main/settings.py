@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-*1eb$e#rgcg&ed0*nm71n6pmr9lbm9=*ik@afo9x(xkk7$mbo7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -83,11 +83,18 @@ WSGI_APPLICATION = 'main.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'default': dj_database_url.config()
-    }
-}
+ON_HEROKU = os.environ.get('ON_HEROKU')
+HEROKU_SERVER = os.environ.get('HEROKU_SERVER')
+
+
+if ON_HEROKU:
+    DATABASE_URL = 'postgresql://<postgresql>'
+else:
+    DATABASE_URL = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+
+DATABASES = {'default': dj_database_url.config(default=DATABASE_URL)}
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Password validation
